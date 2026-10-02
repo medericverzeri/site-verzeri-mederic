@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", ui-serif, Georgia, serif;
+  --color-ink: #14221c;
+  --color-inksoft: #4d5f56;
+  --color-forest: #1b4336;
+  --color-moss: #2f6f5e;
+  --color-brass: #7c5c34;
+  --color-brasssoft: #e6d5ba;
+  --color-cream: #f3eee6;
+  --color-paper: #fbf7f1;
+  --color-line: #e5dccf;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #e6d5ba;
+  color: #14221c;
+}
+
+:focus-visible {
+  outline: 2px solid #a68456;
+  outline-offset: 3px;
+}
+
+.grain {
+  position: relative;
+}
+
+.grain::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+  background-image: radial-gradient(rgba(20, 34, 28, 0.18) 0.6px, transparent 0.6px);
+  background-size: 3px 3px;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 2.5rem;
+  width: max-content;
+  animation: drift 38s linear infinite;
+}
+
+@keyframes drift {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.reveal {
+  animation: rise 0.8s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.card-lift {
+  transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px rgba(20, 34, 28, 0.08);
+}
+
+.photo-zoom img {
+  transition: transform 0.7s ease;
+}
+
+.photo-zoom:hover img {
+  transform: scale(1.045);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .reveal {
+    animation: none;
+  }
+  .card-lift,
+  .photo-zoom img {
+    transition: none;
+  }
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.8rem;
+  border: 1px solid var(--color-line);
+  background: #fff;
+  padding: 0.65rem 0.8rem;
+  font: inherit;
+  color: var(--color-ink);
+}
+
+.input:focus {
+  outline: 2px solid #7c5c34;
+  outline-offset: 1px;
+}
+
+@media print {
+  header,
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: white;
+  }
+}
