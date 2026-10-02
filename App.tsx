@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from "react";
 import Admin from "./Admin";
+import heroImg from "./hero-matiere.jpg";
+import detailImg from "./detail-bois.jpg";
 import {
   PUBLIC_BIN_ID,
   buildVcard,
@@ -334,7 +336,7 @@ export default function App() {
             <div className="relative reveal">
               <div className="relative overflow-hidden rounded-[1.7rem] bg-forest shadow-[0_30px_70px_rgba(20,34,28,0.16)]">
                 <img
-                  src="/images/hero-matiere.jpg"
+                  src={heroImg}
                   alt="Illustration d’un atelier de matières de réemploi : bois, pierre et terre cuite"
                   className="h-[28rem] w-full object-cover sm:h-[34rem]"
                 />
@@ -386,15 +388,15 @@ export default function App() {
               <h2 className="mt-3 font-serif text-4xl leading-[1.05] tracking-tight sm:text-5xl">{about.title}</h2>
               <p className="mt-5 text-inksoft">{about.lead}</p>
               <img
-                src="/images/detail-bois.jpg"
+                src={detailImg}
                 alt="Détail de bois de réemploi et d’outils d’atelier"
                 className="mt-8 hidden h-56 w-full rounded-3xl object-cover lg:block"
               />
             </div>
             <div className="space-y-5">
-              {about.paragraphs.map((paragraph) => (
+              {about.paragraphs.map((paragraph, index) => (
                 <blockquote
-                  key={paragraph.slice(0, 24)}
+                  key={`${index}-${paragraph.slice(0, 24)}`}
                   className="border-l-2 border-brass pl-5 font-serif text-2xl leading-snug text-forest sm:text-[1.7rem]"
                 >
                   {paragraph}
@@ -404,7 +406,7 @@ export default function App() {
                 <h3 className="text-xs uppercase tracking-[0.2em] text-inksoft">Mes principales missions</h3>
                 <ol className="mt-4 divide-y divide-line border-y border-line">
                   {about.missions.map((mission, index) => (
-                    <li key={mission} className="grid grid-cols-[3rem_1fr] items-start gap-3 py-4">
+                    <li key={`${index}-${mission.slice(0, 20)}`} className="grid grid-cols-[3rem_1fr] items-start gap-3 py-4">
                       <span className="font-serif text-xl text-brass">0{index + 1}</span>
                       <span className="pt-1 leading-relaxed">{mission}</span>
                     </li>
@@ -425,8 +427,8 @@ export default function App() {
                   bâtiment.
                 </p>
                 <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                  {steps.map((step) => (
-                    <article key={step.n + step.title} className="rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
+                  {steps.map((step, index) => (
+                    <article key={`${index}-${step.n}`} className="rounded-2xl bg-white/10 p-4 ring-1 ring-white/10">
                       <p className="font-serif text-brasssoft">{step.n}</p>
                       <h3 className="mt-1 font-medium">{step.title}</h3>
                       <p className="mt-2 text-sm leading-relaxed text-white/75">{step.text}</p>
@@ -506,8 +508,8 @@ export default function App() {
             </div>
 
             <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filtered.map((company) => (
-                <article key={company.id} className="card-lift flex flex-col rounded-3xl border border-line bg-paper p-4">
+              {filtered.map((company, index) => (
+                <article key={`${company.id}-${index}`} className="card-lift flex flex-col rounded-3xl border border-line bg-paper p-4">
                   <div className="grid h-36 place-items-center rounded-2xl bg-white">
                     {company.logo ? (
                       <img
@@ -547,7 +549,7 @@ export default function App() {
           <div className="mt-8 columns-1 gap-4 sm:columns-2 lg:columns-3">
             {shots.map((shot, index) => (
               <button
-                key={shot.src}
+                key={`${shot.src}-${index}`}
                 onClick={() => setLightbox(index)}
                 className="photo-zoom group mb-4 block w-full overflow-hidden rounded-3xl bg-cream text-left"
               >
@@ -566,9 +568,7 @@ export default function App() {
             ))}
           </div>
           {shots.length === 0 && (
-            <p className="mt-6 text-inksoft">
-              Aucune photographie pour le moment. Ajoutez-en depuis l’espace admin.
-            </p>
+            <p className="mt-6 text-inksoft">Aucune photographie pour le moment. Ajoutez-en depuis l’espace admin.</p>
           )}
         </section>
 
@@ -585,9 +585,9 @@ export default function App() {
               </p>
 
               <div className="mt-8 grid grid-cols-2 gap-2">
-                {faqs.map((item) => (
+                {faqs.map((item, index) => (
                   <button
-                    key={item.title}
+                    key={`${index}-${item.title}`}
                     onClick={() => ask(item.title)}
                     className={`rounded-2xl px-3 py-3 text-left text-sm ring-1 ring-white/10 ${
                       subject === item.title ? "bg-paper text-ink" : "bg-white/5 hover:bg-white/10"
@@ -630,7 +630,7 @@ export default function App() {
             <div className="rounded-[1.7rem] bg-paper p-5 text-ink sm:p-8">
               <div className="mb-6">
                 {faqs.map((item, index) => (
-                  <div key={item.title} className="border-b border-line">
+                  <div key={`${index}-${item.title}`} className="border-b border-line">
                     <button
                       className="flex w-full items-center justify-between py-3 text-left text-sm font-medium"
                       aria-expanded={openFaq === index}
@@ -696,8 +696,8 @@ export default function App() {
                     }}
                     className="field"
                   >
-                    {faqs.map((item) => (
-                      <option key={item.title}>{item.title}</option>
+                    {faqs.map((item, index) => (
+                      <option key={`${index}-${item.title}`}>{item.title}</option>
                     ))}
                   </select>
                 </Field>
@@ -832,8 +832,8 @@ export default function App() {
                 · {profile.mobile}.
               </p>
               <p>
-                Les horaires, modalités de dépôt et informations pratiques sont reprises des informations publiques de
-                {" "}{profile.employer} et de la Maison d’Économie Solidaire. Elles peuvent évoluer : la confirmation se
+                Les horaires, modalités de dépôt et informations pratiques sont reprises des informations publiques de{" "}
+                {profile.employer} et de la Maison d’Économie Solidaire. Elles peuvent évoluer : la confirmation se
                 fait à l’inscription ou par téléphone.
               </p>
               <p>

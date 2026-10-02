@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useRef, useState, type FormEvent, type ReactNode } from "react";
 import {
   DEFAULT_PIN,
   defaultContent,
@@ -47,10 +47,10 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
 
   function flash(message: string) {
     setStatus(message);
-    window.setTimeout(() => setStatus(""), 2400);
+    window.setTimeout(() => setStatus(""), 3200);
   }
 
-  function login(event: React.FormEvent) {
+  function login(event: FormEvent) {
     event.preventDefault();
     if (pinInput.trim() === getPin()) {
       setAuthed(true);
@@ -112,9 +112,7 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
         <form onSubmit={login} className="w-full max-w-sm rounded-3xl bg-paper p-7 shadow-2xl">
           <p className="text-xs uppercase tracking-[0.2em] text-brass">Espace admin</p>
           <h2 className="mt-2 font-serif text-3xl">Bonjour Médéric</h2>
-          <p className="mt-2 text-sm text-inksoft">
-            Entrez votre code d’accès pour modifier le site.
-          </p>
+          <p className="mt-2 text-sm text-inksoft">Entrez votre code d’accès pour modifier le site.</p>
           <input
             type="password"
             value={pinInput}
@@ -125,8 +123,8 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
           />
           {pinError && <p className="mt-2 text-sm text-red-700">{pinError}</p>}
           <p className="mt-2 text-xs text-inksoft">
-            Code par défaut : <code className="rounded bg-cream px-1">{DEFAULT_PIN}</code> — à
-            changer dans Réglages.
+            Code par défaut : <code className="rounded bg-cream px-1">{DEFAULT_PIN}</code> — à changer dans
+            Réglages.
           </p>
           <div className="mt-5 flex gap-3">
             <button type="submit" className="rounded-full bg-forest px-5 py-2.5 text-sm text-paper">
@@ -148,7 +146,7 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
           <p className="text-[0.65rem] uppercase tracking-[0.2em] text-brasssoft">Espace admin</p>
           <p className="font-serif text-xl leading-none">Modifier le site</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           {status && <span className="rounded-full bg-white/15 px-3 py-1.5 text-xs">{status}</span>}
           {dirty && (
             <button onClick={cancel} className="rounded-full border border-white/30 px-4 py-2 text-sm">
@@ -158,9 +156,7 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
           <button
             onClick={publish}
             disabled={!dirty}
-            className={`rounded-full px-4 py-2 text-sm ${
-              dirty ? "bg-brasssoft text-ink" : "bg-white/15 text-white/60"
-            }`}
+            className={`rounded-full px-4 py-2 text-sm ${dirty ? "bg-brasssoft text-ink" : "bg-white/15 text-white/60"}`}
           >
             {dirty ? "Enregistrer" : "Enregistré"}
           </button>
@@ -172,8 +168,8 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
 
       {dirty && (
         <p className="border-b border-brasssoft bg-cream px-4 py-2 text-xs text-ink sm:px-6">
-          Aperçu en direct : le site derrière reflète déjà vos changements. Cliquez sur
-          « Enregistrer » pour les conserver.
+          Aperçu en direct : le site derrière reflète déjà vos changements. Cliquez sur « Enregistrer » pour les
+          conserver.
         </p>
       )}
 
@@ -208,9 +204,7 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
           </div>
 
           <div className="mx-auto max-w-3xl space-y-8 p-4 pb-24 sm:p-8">
-            {tab === "identite" && (
-              <IdentityTab content={content} onChange={onChange} />
-            )}
+            {tab === "identite" && <IdentityTab content={content} onChange={onChange} />}
             {tab === "apropos" && <AboutTab content={content} onChange={onChange} />}
             {tab === "entreprises" && <CompaniesTab content={content} onChange={onChange} />}
             {tab === "galerie" && <GalleryTab content={content} onChange={onChange} />}
@@ -258,8 +252,7 @@ export default function Admin({ content, saved, onChange, onSaved, onClose }: Pr
 
 function IdentityTab({ content, onChange }: { content: SiteContent; onChange: (c: SiteContent) => void }) {
   const p = content.profile;
-  const set = (patch: Partial<SiteContent["profile"]>) =>
-    onChange({ ...content, profile: { ...p, ...patch } });
+  const set = (patch: Partial<SiteContent["profile"]>) => onChange({ ...content, profile: { ...p, ...patch } });
   return (
     <>
       <Section title="Identité" hint="Affiché dans l’en-tête, le grand titre et le pied de page.">
@@ -345,19 +338,23 @@ function AboutTab({ content, onChange }: { content: SiteContent; onChange: (c: S
         <Field label="Phrase d’accroche">
           <textarea className="input min-h-20" value={a.lead} onChange={(e) => set({ lead: e.target.value })} />
         </Field>
-        <ListEditor
+        <ListEditor<string>
           label="Paragraphes (citations)"
           items={a.paragraphs}
           onChange={(paragraphs) => set({ paragraphs })}
-          render={(value, update) => <textarea className="input min-h-24" value={value} onChange={(e) => update(e.target.value)} />}
+          render={(value, update) => (
+            <textarea className="input min-h-24" value={value} onChange={(e) => update(e.target.value)} />
+          )}
           blank=""
           addLabel="Ajouter un paragraphe"
         />
-        <ListEditor
+        <ListEditor<string>
           label="Mes principales missions"
           items={a.missions}
           onChange={(missions) => set({ missions })}
-          render={(value, update) => <textarea className="input min-h-20" value={value} onChange={(e) => update(e.target.value)} />}
+          render={(value, update) => (
+            <textarea className="input min-h-20" value={value} onChange={(e) => update(e.target.value)} />
+          )}
           blank=""
           addLabel="Ajouter une mission"
         />
@@ -459,9 +456,7 @@ function GalleryTab({ content, onChange }: { content: SiteContent; onChange: (c:
         onChange={(gallery) => onChange({ ...content, gallery })}
         render={(shot, update) => (
           <div className="space-y-2">
-            {shot.src && (
-              <img src={shot.src} alt="" className="h-28 w-full rounded-xl object-cover" loading="lazy" />
-            )}
+            {shot.src && <img src={shot.src} alt="" className="h-28 w-full rounded-xl object-cover" loading="lazy" />}
             <Field label="Adresse de l’image (URL)">
               <input className="input" value={shot.src} onChange={(e) => update({ ...shot, src: e.target.value })} />
             </Field>
@@ -574,22 +569,18 @@ function SettingsTab({
             Créez un compte gratuit sur <strong>jsonbin.io</strong> (e-mail + mot de passe).
           </li>
           <li>
-            Cliquez « Create Bin », collez le contenu de votre sauvegarde JSON (bouton d’export
-            ci-dessous), puis enregistrez le bin en visibilité <strong>Public</strong>.
+            Cliquez « Create Bin », collez le contenu de votre sauvegarde JSON (bouton d’export ci-dessous), puis
+            enregistrez le bin en visibilité <strong>Public</strong>.
           </li>
           <li>
-            Copiez l’<strong>ID du bin</strong> (dans l’adresse, après /b/) et votre clé{" "}
-            <strong>X-Master-Key</strong> (menu API Keys).
+            Copiez l’<strong>ID du bin</strong> (dans l’adresse, après /b/) et votre clé <strong>X-Master-Key</strong>{" "}
+            (menu API Keys).
           </li>
           <li>Collez les deux ci-dessous, puis « Tester & publier ».</li>
         </ol>
         <Row>
           <Field label="ID du bin (ex. 68dd2a1bae596e708f0a1234)">
-            <input
-              className="input"
-              value={sync.binId}
-              onChange={(e) => setSync({ ...sync, binId: e.target.value })}
-            />
+            <input className="input" value={sync.binId} onChange={(e) => setSync({ ...sync, binId: e.target.value })} />
           </Field>
           <Field label="Clé d’accès X-Master-Key">
             <input
@@ -608,24 +599,20 @@ function SettingsTab({
           >
             Tester & publier maintenant
           </button>
-          <button
-            onClick={pull}
-            disabled={busy}
-            className="rounded-full border border-line px-4 py-2.5 text-sm disabled:opacity-50"
-          >
+          <button onClick={pull} disabled={busy} className="rounded-full border border-line px-4 py-2.5 text-sm disabled:opacity-50">
             Récupérer la version en ligne
           </button>
         </div>
         {syncMsg && <p className="text-sm text-inksoft">{syncMsg}</p>}
         <p className="text-xs text-inksoft">
-          Sur un nouvel ordinateur : ouvrez l’espace admin, collez les mêmes ID + clé ici, puis
-          « Récupérer la version en ligne ». Vous retrouvez tout votre contenu.
+          Sur un nouvel ordinateur : ouvrez l’espace admin, collez les mêmes ID + clé ici, puis « Récupérer la version
+          en ligne ». Vous retrouvez tout votre contenu.
         </p>
       </Section>
 
       <Section
         title="Sauvegarde & transfert"
-        hint="Vos modifications sont stockées dans le navigateur de cet appareil. Pour les retrouver ailleurs (ou les protéger), téléchargez la sauvegarde puis importez-la sur l’autre appareil."
+        hint="Téléchargez une copie de votre contenu, ou importez-en une. Pratique pour garder une sauvegarde de secours."
       >
         <div className="flex flex-wrap gap-3">
           <button onClick={onExport} className="rounded-full bg-forest px-4 py-2.5 text-sm text-paper">
@@ -673,9 +660,8 @@ function SettingsTab({
           </li>
           <li>Les visiteurs ne voient jamais cet espace : il n’apparaît qu’après saisie du code.</li>
           <li>
-            Les modifications sont visibles immédiatement sur cet appareil. Pour qu’elles soient
-            servies à tous les visiteurs, transmettez la sauvegarde JSON afin de mettre à jour la
-            version publiée.
+            Le code d’accès est enregistré sur chaque appareil : sur un nouvel ordinateur, c’est le code par défaut
+            qui s’applique tant que vous ne l’avez pas changé.
           </li>
         </ul>
       </Section>

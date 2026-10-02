@@ -99,20 +99,6 @@ body {
   transform: scale(1.045);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  .marquee-track,
-  .reveal {
-    animation: none;
-  }
-  .card-lift,
-  .photo-zoom img {
-    transition: none;
-  }
-}
-
 .input {
   width: 100%;
   border-radius: 0.8rem;
@@ -126,6 +112,20 @@ body {
 .input:focus {
   outline: 2px solid #7c5c34;
   outline-offset: 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .reveal {
+    animation: none;
+  }
+  .card-lift,
+  .photo-zoom img {
+    transition: none;
+  }
 }
 
 @media print {

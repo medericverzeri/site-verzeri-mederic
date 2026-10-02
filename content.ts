@@ -296,8 +296,8 @@ export const DEFAULT_PIN = "dechetlab60";
 
 /**
  * Identifiant public du "classeur" JSONBin servi à tous les visiteurs.
- * Une fois que Médéric a créé son bin (voir guide), on colle l'ID ici
- * pour que chaque visiteur charge automatiquement la dernière version.
+ * Une fois le bin créé (voir guide), on colle l'ID ici pour que chaque
+ * visiteur charge automatiquement la dernière version publiée.
  */
 export const PUBLIC_BIN_ID = "";
 
